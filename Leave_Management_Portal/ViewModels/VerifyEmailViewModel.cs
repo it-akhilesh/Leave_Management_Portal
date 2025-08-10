@@ -7,5 +7,6 @@ namespace Leave_Management_Portal.ViewModels
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress]
         public string Email { get; set; }
+        
     }
 }
