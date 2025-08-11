@@ -63,6 +63,7 @@ namespace Leave_Management_Portal.Controllers
 
                 if (result.Succeeded)
                 {
+                    TempData["SuccessMessage"] = "Registration Successfully!";
                     return RedirectToAction("Login", "Account");
                 }
                 else
