@@ -1,5 +1,7 @@
 using Leave_Management_Portal.Data;
 using Leave_Management_Portal.Models;
+using Leave_Management_Portal.Repository.Interface;
+using Leave_Management_Portal.Repository.Service;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +19,8 @@ namespace Leave_Management_Portal
             builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("LeaveConnection")));
 
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
+      
             builder.Services.AddIdentity<Users, IdentityRole>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;

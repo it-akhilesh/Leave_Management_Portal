@@ -1,4 +1,5 @@
 ﻿using Leave_Management_Portal.Models;
+using Leave_Management_Portal.Repository.Interface;
 using Leave_Management_Portal.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +11,13 @@ namespace Leave_Management_Portal.Controllers
     {
         private readonly SignInManager<Users> signInManager;
         private readonly UserManager<Users> userManager;
+        private IEmailSender emailSender;
 
-        public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager)
+        public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager,IEmailSender emailSender)
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
+            this.emailSender = emailSender;
         }
         public IActionResult Login()
         {
@@ -63,7 +66,8 @@ namespace Leave_Management_Portal.Controllers
 
                 if (result.Succeeded)
                 {
-                    TempData["SuccessMessage"] = "Registration Successfully!";
+                    var isEmailSent = await emailSender.EmailSendAsync(model.Email, "Account Created", "Congratulation, Your account has been successfully created");
+                    TempData["SuccessMessage"] = "User Registered Successfully";
                     return RedirectToAction("Login", "Account");
                 }
                 else
@@ -76,7 +80,7 @@ namespace Leave_Management_Portal.Controllers
                 }
                   
             }
-            return View(model);
+            return View(model); 
         }
        
         public IActionResult VerifyEmail()
